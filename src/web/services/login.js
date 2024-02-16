@@ -2,19 +2,23 @@ import config from "@/web/config.js"
 import routes from "@/web/routes.js"
 
 const signIn =
-  ({ api, setSession, users }) =>
+  ({ api, setSession }) =>
   async ({ username, password }) => {
     try {
-      const data = await api.post(routes.api.signIn(), {
+      const {data} = await api.post(routes.api.signIn(), {
         username,
-        password,
-        users
+        password, 
       })
+      let error = null
+      
+      if(data.verify == true) {
+        setSession(data)
+        localStorage.setItem(config.session.localStorageKey, data.user.id)
+      } else {
+        error.err = "Vous n'avez pas de compte"
+      }
 
-      setSession()
-      localStorage.setItem(config.session.localStorageKey)
-
-      return [null, true]
+      return [error, data]
     } catch (err) {
       const error = err.response?.data?.error || "Oops. Something went wrong"
 

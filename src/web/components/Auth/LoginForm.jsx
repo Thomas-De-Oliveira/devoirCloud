@@ -2,7 +2,6 @@ import * as yup from "yup"
 import { Form, Formik } from "formik"
 import Button from "@/web/components/Button.jsx"
 import FormField from "@/web/components/FormField.jsx"
-import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons"
 import FormError from "@/web/components/FormError.jsx"
 
 const defaultInitialValues = {
@@ -36,16 +35,14 @@ const LoginForm = (props) => {
         <FormError error={error} />
         <Form className="flex flex-col gap-4 p-4">
           <FormField
-            name="email"
+            name="username"
             type="text"
-            label="E-mail"
-            icon={faEnvelope}
+            label="Username"
           />
           <FormField
             name="password"
             type="password"
             label="Password"
-            icon={faLock}
           />
           <Button type="submit">Se connecter</Button>
         </Form>

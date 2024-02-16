@@ -1,6 +1,6 @@
 import validate from "@/api/middlewares/validate.js"
 import mw from "@/api/middlewares/mw.js"
-import users from "../../../users.json"
+import utilisateurs from "../../../users.json"
 import { stringValidator } from "@/validators.js"
 
 
@@ -16,9 +16,15 @@ const handler = mw({
       locals: {
         body: { username, password },
       },
-      res,
+      res
     }) => {
+      const verify = utilisateurs.users.find((user) => user.username = username && user.mdp == password) ? true : false
 
+      if(verify == true) {
+        res.send({verify: verify, user: utilisateurs.users.find((user) => user.username = username && user.mdp == password)})
+      }else {
+        res.send({verify: verify, user: null})
+      }
     },
   ],
 })

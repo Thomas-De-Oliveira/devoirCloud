@@ -15,8 +15,6 @@ const mw = (methodHandlers) => async (req, res) => {
   let handlerIndex = 0
   const locals = {}
   const ctx = {
-    db,
-    logger,
     req,
     res,
     get locals() {
