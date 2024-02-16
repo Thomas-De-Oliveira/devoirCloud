@@ -3,19 +3,19 @@
         {
             "id":1,
             "username": "Yves",
-            "mdp": "YvesRouge123?",
+            "mdp": "root",
             "credits": "3"
         },
         {
             "id":2,
             "username": "Thomas",
-            "mdp": "ThomasDeo123?",
+            "mdp": "root",
             "credits": "1"
         },
         {
             "id":3,
             "username": "Hugo",
-            "mdp": "HugoVaill123?",
+            "mdp": "root",
             "credits": "0"
         }
     ]

@@ -18,10 +18,10 @@ const handler = mw({
       },
       res
     }) => {
-      const verify = utilisateurs.users.find((user) => user.username = username && user.mdp == password) ? true : false
+      const verify = utilisateurs.users.find((user) => user.username == username && user.mdp == password) ? true : false
 
       if(verify == true) {
-        res.send({verify: verify, user: utilisateurs.users.find((user) => user.username = username && user.mdp == password)})
+        res.send({verify: verify, user: utilisateurs.users.find((user) => user.username == username && user.mdp == password)})
       }else {
         res.send({verify: verify, user: null})
       }

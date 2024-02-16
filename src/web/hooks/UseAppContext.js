@@ -18,7 +18,8 @@ export const AppContextProvider = (props) => {
   const signIn = signInService({ api, setSession })
   const signOut = useCallback(() => {
     localStorage.removeItem(config.session.localStorageKey)
-    setSession(false)
+    localStorage.removeItem(config.session.localStorageCredit)
+    setSession(null)
   }, [])
 
   return (

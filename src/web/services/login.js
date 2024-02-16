@@ -14,6 +14,7 @@ const signIn =
       if(data.verify == true) {
         setSession(data)
         localStorage.setItem(config.session.localStorageKey, data.user.id)
+        localStorage.setItem(config.session.localStorageCredit, data.user.credits)
       } else {
         error.err = "Vous n'avez pas de compte"
       }
