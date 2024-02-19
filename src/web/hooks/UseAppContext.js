@@ -2,6 +2,8 @@ import config from "@/web/config.js"
 import createAPIClient from "@/web/createAPIClient.js"
 import signInService from "@/web/services/login.js"
 import createVMService from "@/web/services/createVM.js"
+import destroyVMService from "../services/destroyVM.js"
+import destroyDiskService from "../services/destroyDisk.js"
 import {
   createContext,
   useCallback,
@@ -30,6 +32,8 @@ export const AppContextProvider = (props) => {
 
   const signIn = signInService({ api, setSession, setJwt })
   const createVM = createVMService({api, jwt})
+  const destroyVM = destroyVMService({api, jwt})
+  const destroyDisk = destroyDiskService({api,jwt})
   const signOut = useCallback(() => {
     localStorage.removeItem(config.session.localStorageKey)
     localStorage.removeItem(config.session.localStorageCredit)
@@ -44,7 +48,9 @@ export const AppContextProvider = (props) => {
         actions: {
           signOut,
           signIn,
-          createVM
+          createVM,
+          destroyVM,
+          destroyDisk
         },
         state: {
           session,

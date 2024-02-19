@@ -3,7 +3,9 @@ const routes = {
     machine: (id) => `${id}/machines`,
     api: {
       signIn: () => "/login",
-      createVM: () =>"/createVM"
+      createVM: () =>"/createVM",
+      destroyVM: () =>"/destroyVM",
+      destroyDisk: () =>"/destroyDisk"
     },
   }
   

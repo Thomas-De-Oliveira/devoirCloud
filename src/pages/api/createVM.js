@@ -142,7 +142,7 @@ const handler = mw({
         try {
           const ipAddress = await networkClient.publicIPAddresses.get(resourceGroupName, publicIPName)
 
-          res.send({ipAddress : ipAddress.ipAddress, name: vmParameters.osProfile.adminUsername, password: vmParameters.osProfile.adminPassword})
+          res.send({ipAddress : ipAddress.ipAddress, name: vmParameters.osProfile.adminUsername, password: vmParameters.osProfile.adminPassword, nameVM: vmName})
         }catch (error) {
             res.send(error)
         }

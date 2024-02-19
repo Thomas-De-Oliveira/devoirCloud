@@ -28,7 +28,7 @@ const Machines = (props) => {
     const [virtualMachine, setVirtualMachine] = useState(null)
 
     const {
-      actions: { createVM },
+      actions: { createVM, destroyVM, destroyDisk },
     } = useAppContext()
 
     useEffect(() => {
@@ -58,6 +58,24 @@ const Machines = (props) => {
       },
       [createVM]
     )
+
+    useEffect(() => {
+      if (virtualMachine != null) {
+        const timeoutId = setTimeout(async () => {
+          const [destroyErr] = await destroyVM(virtualMachine.nameVM)
+
+          if (destroyErr) {
+            setError("Erreur lors de la destruction de la machine virtuelle :", destroyErr)
+          } else {
+            setVirtualMachine(null)
+            setIsOpen(false)
+            await destroyDisk(virtualMachine.nameVM)
+          }
+        }, 1 * 60 * 1000)
+    
+        return () => clearTimeout(timeoutId)
+      }
+    }, [virtualMachine, destroyVM, destroyDisk])
 
 
   return (
