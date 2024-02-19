@@ -2,7 +2,7 @@ import config from "@/web/config.js"
 import routes from "@/web/routes.js"
 
 const signIn =
-  ({ api, setSession }) =>
+  ({ api, setSession, setJwt }) =>
   async ({ username, password }) => {
     try {
       const {data} = await api.post(routes.api.signIn(), {
@@ -13,6 +13,8 @@ const signIn =
       
       if(data.verify == true) {
         setSession(data)
+        setJwt(data.token)
+        localStorage.setItem(config.session.localStorageToken, data.token)
         localStorage.setItem(config.session.localStorageKey, data.user.id)
         localStorage.setItem(config.session.localStorageCredit, data.user.credits)
       } else {

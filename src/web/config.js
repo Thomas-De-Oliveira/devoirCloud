@@ -4,7 +4,8 @@ const config = {
     },
     session: {
       localStorageKey: "devoirCloud",
-      localStorageCredit: "creditsUser"
+      localStorageCredit: "creditsUser",
+      localStorageToken: "token"
     },
   }
   
