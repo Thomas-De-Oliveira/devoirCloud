@@ -9,35 +9,22 @@ import {
   useCallback,
   useContext,
   useState,
-  useEffect
 } from "react"
 
 const AppContext = createContext()
 
 export const AppContextProvider = (props) => {
   const { ...otherProps } = props
-
-  useEffect(() => {
-    const jwt = localStorage.getItem(config.session.localStorageToken)
-
-    if (!jwt) {
-      return
-    }
-
-    setJwt(jwt)
-  }, [])
   const [session, setSession] = useState(null)
-  const [jwt, setJwt] = useState(null)
   const api = createAPIClient()
 
-  const signIn = signInService({ api, setSession, setJwt })
-  const createVM = createVMService({api, jwt})
-  const destroyVM = destroyVMService({api, jwt})
-  const destroyDisk = destroyDiskService({api,jwt})
+  const signIn = signInService({ api, setSession })
+  const createVM = createVMService({api})
+  const destroyVM = destroyVMService({api})
+  const destroyDisk = destroyDiskService({api})
   const signOut = useCallback(() => {
     localStorage.removeItem(config.session.localStorageKey)
     localStorage.removeItem(config.session.localStorageCredit)
-    localStorage.removeItem(config.session.localStorageToken)
     setSession(null)
   }, [])
 

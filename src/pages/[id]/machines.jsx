@@ -31,6 +31,8 @@ const Machines = (props) => {
       actions: { createVM, destroyVM, destroyDisk },
     } = useAppContext()
 
+    // le useEffect me permet de savoir si l'utilisateur est bien sur la bonne page je verifie déjà qu'il est connecté et si son id correspond bien a celui de l'url
+    // s'il ne correspond je le redirige vers la page home
     useEffect(() => {
         const id = localStorage.getItem(config.session.localStorageKey)
         setCreditUser(localStorage.getItem(config.session.localStorageCredit))
@@ -39,8 +41,14 @@ const Machines = (props) => {
           router.push(routes.home())
         }
     }, [idPage, router])
+    //ici je filtre les machines en fonction des droits de l'utilisateur
     const dispoMachines = allMachines.filter((machine) => machine.price <= creditUser)
-
+    
+    // le handleSubmit va créer une machine virtuel en fonction du type choisi en interrogent le service
+    // il recevra une erreur ou un données de machine virtuel
+    // si il y a une erreur on l'affiche
+    // on ouvre le pop-up avec les information de la VM
+    // et on enregistre les données de la VM
     const handleSubmit = useCallback(
       async (name) => {
         setError(null)
@@ -59,6 +67,9 @@ const Machines = (props) => {
       [createVM]
     )
 
+    //ce useEffect vérifie si nous avons les données d'une machien virtuel
+    // si c'est le cas il lance un timer de 10 minutes qui au bout de ce temps supprimera la machine virtuel et le disk
+    // une fois supprimer nous remettons les données de la machine virtuel a null
     useEffect(() => {
       if (virtualMachine != null) {
         const timeoutId = setTimeout(async () => {
@@ -71,7 +82,7 @@ const Machines = (props) => {
             setIsOpen(false)
             await destroyDisk(virtualMachine.nameVM)
           }
-        }, 1 * 60 * 1000)
+        }, 10 * 60 * 1000)
     
         return () => clearTimeout(timeoutId)
       }

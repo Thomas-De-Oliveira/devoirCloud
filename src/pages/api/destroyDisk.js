@@ -4,12 +4,13 @@ import { stringValidator } from "@/validators.js"
 import {ComputeManagementClient} from "@azure/arm-compute"
 import {DefaultAzureCredential} from "@azure/identity"
 
+//ici j'ai un middleware et une validation des données pour savoir si le format de données que je recoit est bien celle que j'attend
+// si les données on le bon format je me connecte a mon portail azure avec le tenantId, le clientId et le clientSecret
 const handler = mw({
   POST: [
     validate({
       body: {
         nameVM: stringValidator.required(),
-        jwt: stringValidator.required()
       },
     }),
     async ({
@@ -25,8 +26,9 @@ const handler = mw({
             clientSecret: process.env.AZURE_CLIENT_SECRET
         })
         const computeClient = new ComputeManagementClient(credential, subscriptionId)
-        const resourceGroupName = "NetworkWatcherRG"
+        const resourceGroupName = process.env.AZURE_RESSOURCE_GROUP_NAME
 
+        //ici je supprime le disk de la machine virtuel present dans mon groupe de ressource
         try {
             await computeClient.disks.beginDeleteAndWait(resourceGroupName, nameVM + "osdisk")
            

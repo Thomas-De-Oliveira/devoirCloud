@@ -10,6 +10,9 @@ const Home = () => {
     actions: { signIn },
   } = useAppContext()
 
+
+//le useEffect va servir a verifier le local storage pour voir s'il y a déjà un utilisateur connecté si c'est le cas je fais une redirection vers la page adéquate
+//Cela est pour empecher l'accès a la page connexion aux personnes déjà connecter
   useEffect(() => {
     const id = localStorage.getItem("devoirCloud")
 
@@ -19,6 +22,8 @@ const Home = () => {
   }, [router])
 
   const [error, setError] = useState(null)
+  // le handle submit va appeler le service sign In avec les valeurs de la personnes qui essaye de se connecter mot de passe et nom d'utilisateur
+  // Le service interrogera l'api et renverra une erreur ou une donnée s'il y a une erreur on affiche l'erreur et sinon on renvoit l'utilisateur sur la nouvelle page
   const handleSubmit = useCallback(
     async (values) => {
       setError(null)

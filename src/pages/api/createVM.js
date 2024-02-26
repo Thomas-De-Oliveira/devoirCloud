@@ -5,12 +5,14 @@ import {ComputeManagementClient} from "@azure/arm-compute"
 import {NetworkManagementClient } from "@azure/arm-network"
 import {DefaultAzureCredential} from "@azure/identity"
 
+//ici j'ai un middleware et une validation des données pour savoir si le format de données que je recoit est bien celle que j'attend
+// si les données on le bon format je me connecte a mon portail azure avec le tenantId, le clientId et le clientSecret
+// Je recupere toute les données que j'ai besoin par rapport a ce que j'ai créeer sur le portail azure et dans mon groupe de ressource
 const handler = mw({
   POST: [
     validate({
       body: {
         nameImage: stringValidator.required(),
-        jwt: stringValidator.required()
       },
     }),
     async ({
@@ -31,14 +33,14 @@ const handler = mw({
         })
         const computeClient = new ComputeManagementClient(credential, subscriptionId)
         const networkClient = new NetworkManagementClient(credential, subscriptionId)
-        const vnetName = "devoir_cloud"
+        const vnetName = process.env.AZURE_VIRTUAL_NET_NAME
+        const resourceGroupName = process.env.AZURE_RESSOURCE_GROUP_NAME
+        const domainNameLabel = process.env.AZURE_DOMAIN_LABEL
+        const publicIPName = process.env.AZURE_PUBLIC_IP_NAME
+        const location = process.env.AZURE_LOCATION
         const subnetName = "default"
         const vmName = "vm" + nameImage
-        const resourceGroupName = "NetworkWatcherRG"
         const networkInterfaceName = "testnic"
-        const location = "francecentral"
-        const domainNameLabel = "exocloud"
-        const publicIPName = "devoirCloud"
         const ipConfigName = "testcrpip"
         const publicIPParameters = {
             location: location,
@@ -47,13 +49,15 @@ const handler = mw({
               domainNameLabel: domainNameLabel
             }
         }
-
+        
+        //première étape je recuperer les données de mon sous-réseaux présent dans le réseau virtuel que j'ai créer dans mon groupe de ressource
         try {
             subnetInfo = await networkClient.subnets.get(resourceGroupName, vnetName, subnetName)
         }catch (error) {
           res.send(error)
         }
 
+        //ici je crée une adresse Ip en fonction du public ip que j'ai créer dans mon groupe de ressource et parametre du public ip
         try {
           publicIPInfo = await networkClient.publicIPAddresses.beginCreateOrUpdateAndWait(resourceGroupName, publicIPName, publicIPParameters)
         }catch (error) {
@@ -72,12 +76,14 @@ const handler = mw({
             ]
           }
 
+        // ici je crée une interface réseau en fonction de cette addresse IP qu'on a créer précedement, on donne le nom qu'on veut a cette interface ici j'ai mis testnic
         try {
           nicInfo = await networkClient.networkInterfaces.beginCreateOrUpdateAndWait(resourceGroupName, networkInterfaceName, nicParameters)
         }catch (error) {
             res.send(error)
         }
 
+        //ici je recuperer les données de l'image en fonction de celle que j'ai sélectionné sur mon interface front
         if(nameImage == "Windows10") {
           image = {
             publisher: "MicrosoftWindowsDesktop",
@@ -100,7 +106,8 @@ const handler = mw({
             version: "latest"
         }
         }
-      
+
+        // la je met en place les paramètres de ma machine virtuel
         const vmParameters = {
             location: location,
             hardwareProfile: {
@@ -133,12 +140,14 @@ const handler = mw({
             }
         }
 
+        // ici je crée la machine virtuel 
         try {
            await computeClient.virtualMachines.beginCreateOrUpdateAndWait(resourceGroupName, vmName, vmParameters)
         } catch (error) {
           res.send(error)
         }
 
+        //ici je recupere l'adresseIP crée et precedement ainsi que des données dont j'ai besoin pour que l'utilisateur puisse avoir accès a la VM
         try {
           const ipAddress = await networkClient.publicIPAddresses.get(resourceGroupName, publicIPName)
 

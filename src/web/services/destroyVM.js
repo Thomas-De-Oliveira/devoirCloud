@@ -1,12 +1,13 @@
 import routes from "@/web/routes.js"
 
+// nous recuperons le nom de la machine et nous envoyons la donnée à l'api
+// une fois la machine supprimer ou l'erreur recuperer je renvois les données au front
 const destroyVM =
-  ({ api, jwt}) =>
+  ({ api }) =>
   async ( nameVM ) => {
     try {
       const {data} = await api.post(routes.api.destroyVM(), {
         nameVM,
-        jwt 
       })      
       
       return [null, data]
