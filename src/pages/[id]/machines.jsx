@@ -89,40 +89,57 @@ const Machines = (props) => {
     }, [virtualMachine, destroyVM, destroyDisk])
 
 
-  return (
-    <><Header />
-        <div className="overflow-x-auto w-full">
-          <FormError error={error}/>
-          <table className="table-auto w-full">
-              <thead className="bg-gray-100 text-black uppercase text-sm">
-                  <tr className="border-b border-gray-200 hover:bg-gray-100">
-                      <th className="py-3 px-4 sm:w-1/6">Nom Machine</th>
-                      <th className="py-3 px-4 sm:w-1/6">Action</th>
-                  </tr>
+    return (
+      <>
+        <Header />
+        <div className="max-w-4xl mx-auto p-4">
+          <div className="overflow-x-auto">
+            <FormError error={error} />
+            <table className="table-auto w-full rounded-lg overflow-hidden">
+              <thead className="bg-rose-100 text-black uppercase text-sm">
+                <tr className="border-b border-gray-200 hover:bg-gray-100">
+                  <th className="py-3 px-4 sm:w-1/6">Nom Machine</th>
+                  <th className="py-3 px-4 sm:w-1/6">Action</th>
+                </tr>
               </thead>
               <tbody className="text-black text-center">
-                  {dispoMachines.map((machine, index) => 
-                  <tr key={index}>
-                      <td className="py-3 px-4 sm:w-1/6">{machine.name}</td>
-                      <td className="py-3 px-4 group-hover:opacity-100 sm:items-center justify">
-                          <Button className="h-12 bg-slate-400" variants="primary" onClick={() => handleSubmit(machine.name)}><PowerIcon className="w-8 text-white" /></Button>
-                      </td>
+                {dispoMachines.map((machine, index) => (
+                  <tr key={index} className="border-b border-gray-200 hover:bg-gray-100">
+                    <td className="py-3 px-4 sm:w-1/6">{machine.name}</td>
+                    <td className="py-3 px-4 group-hover:opacity-100 sm:items-center justify-center">
+                      <div className="flex justify-center">
+                        <Button
+                          className="h-12 bg-salmon hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline"
+                          variants="primary"
+                          onClick={() => handleSubmit(machine.name)}
+                        >
+                          <PowerIcon className="w-6 h-6" />
+                        </Button>
+                      </div>
+                    </td>
                   </tr>
-                  )}
+                ))}
               </tbody>
-          </table>
-          <Modal
-            isOpen={isOpen}
-            modalTitle="Virtual Machine détails"
-            closeModal={() => setIsOpen(false)}
-          >
-          {virtualMachine != null ?  (
-            <><p>Addresse Ip: {virtualMachine.ipAddress}</p><p>Username: {virtualMachine.name}</p><p>Mot de passe: {virtualMachine.password}</p></>
-            ) : "" }
-          </Modal>
-      </div>
-    </>
-  )
-}
+            </table>
+            <Modal
+              isOpen={isOpen}
+              modalTitle="Virtual Machine détails"
+              closeModal={() => setIsOpen(false)}
+            >
+              {virtualMachine != null ? (
+                <>
+                  <p>Addresse Ip: {virtualMachine.ipAddress}</p>
+                  <p>Username: {virtualMachine.name}</p>
+                  <p>Mot de passe: {virtualMachine.password}</p>
+                </>
+              ) : (
+                ""
+              )}
+            </Modal>
+          </div>
+        </div>
+      </>
+    )
+  }
 
 export default Machines

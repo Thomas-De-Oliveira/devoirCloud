@@ -44,8 +44,8 @@ const Home = () => {
   )
 
   return (
-    <main>
-      <LoginForm onSubmit={handleSubmit} error={error} />
+    <main className="flex items-center justify-center h-screen">
+      <LoginForm onSubmit={handleSubmit} />
     </main>
   )
 }

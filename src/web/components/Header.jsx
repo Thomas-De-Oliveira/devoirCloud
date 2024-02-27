@@ -19,10 +19,13 @@ const Header = () => {
   }, [signOut, router])
 
   return (
-    <nav className="bg-slate-200 flex justify-between items-center h-16">
-      <div className="flex gap-4 mr-8 items-center font-semibold text-lg">
+    <nav className="bg-rose-300 flex justify-between items-center h-16 px-6">
+      <div className="flex items-center">
+        <h1 className="text-white text-2xl font-bold">Vos machines disponible</h1>
+      </div>
+      <div className="flex items-center">
         <Link href={routes.home()} onClick={handleSignOut}>
-          <PowerIcon className="w-10 text-white" />
+          <PowerIcon className="w-10 h-10 text-white" />
         </Link>
       </div>
     </nav>
